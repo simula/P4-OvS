@@ -3,28 +3,32 @@ Section: net
 Priority: extra
 Maintainer: Open vSwitch developers <dev@openvswitch.org>
 Uploaders: Simon Horman <horms@debian.org>
-Build-Depends: graphviz,
-               autoconf (>= 2.64),
+Build-Depends: autoconf (>= 2.64),
                automake (>= 1.10) | automake1.10,
                bzip2,
                debhelper (>= 8),
                dh-autoreconf,
+               dh-python,
+               graphviz,
                libssl-dev,
                libtool,
+               libunbound-dev,
+               libunwind-dev,
                openssl,
                procps,
                python3-all,
                python3-sphinx,
                python3-twisted,
-               python3-zope.interface,
-               libunbound-dev,
-               libunwind-dev
+               python3-zope.interface
 Standards-Version: 3.9.3
 Homepage: http://openvswitch.org/
 
 Package: openvswitch-datapath-source
 Architecture: all
-Depends: bzip2, debhelper (>= 5.0.37), module-assistant, ${misc:Depends}
+Depends: bzip2,
+         debhelper (>= 5.0.37),
+         module-assistant,
+         ${misc:Depends}
 Suggests: openvswitch-switch
 Description: Open vSwitch datapath module source - module-assistant version
  Open vSwitch is a production quality, multilayer, software-based,
@@ -42,7 +46,12 @@ Description: Open vSwitch datapath module source - module-assistant version
 
 Package: openvswitch-datapath-dkms
 Architecture: all
-Depends: dkms (>= 1.95), libc6-dev, libelf-dev, make, ${misc:Depends}, ${python3:Depends}
+Depends: dkms (>= 1.95),
+         libc6-dev,
+         libelf-dev,
+         make,
+         ${misc:Depends},
+         ${python3:Depends}
 Description: Open vSwitch datapath module source - DKMS version
  Open vSwitch is a production quality, multilayer, software-based,
  Ethernet virtual switch. It is designed to enable massive network
@@ -59,8 +68,8 @@ Description: Open vSwitch datapath module source - DKMS version
 Package: openvswitch-common
 Architecture: linux-any
 Multi-Arch: foreign
-Depends: python3,
-         libopenvswitch (= ${binary:Version}),
+Depends: libopenvswitch (= ${binary:Version}),
+         python3,
          ${misc:Depends},
          ${shlibs:Depends}
 Suggests: ethtool
@@ -173,7 +182,8 @@ Description: Debug symbols for Open vSwitch packages
 Package: python3-openvswitch
 Architecture: all
 Section: python
-Depends: ${misc:Depends}, ${python3:Depends}
+Depends: ${misc:Depends},
+         ${python3:Depends}
 Description: Python bindings for Open vSwitch
  Open vSwitch is a production quality, multilayer, software-based,
  Ethernet virtual switch. It is designed to enable massive network
@@ -226,11 +236,10 @@ Description: Open vSwitch VTEP utilities
 Package: libopenvswitch-dev
 Architecture: linux-any
 Multi-Arch: same
-Depends:
- libopenvswitch (>= ${binary:Version}),
- libssl-dev,
- libunbound-dev,
- ${misc:Depends}
+Depends: libopenvswitch (>= ${binary:Version}),
+         libssl-dev,
+         libunbound-dev,
+         ${misc:Depends}
 Conflicts: openvswitch-dev
 Replaces: openvswitch-dev
 Description: Open vSwitch development package

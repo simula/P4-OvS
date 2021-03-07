@@ -7,7 +7,8 @@ Standards-Version: 3.7.3
 
 Package: openvswitch-datapath-module-_KVERS_
 Architecture: any
-Recommends: kernel-image-_KVERS_, openvswitch-switch
+Recommends: kernel-image-_KVERS_,
+            openvswitch-switch
 Provides: openvswitch-datapath-module
 Description: Open vSwitch Linux datapath kernel module
  This package contains the Open vSwitch loadable datapath kernel modules for
