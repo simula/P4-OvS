@@ -1,8 +1,7 @@
 Source: openvswitch
 Section: net
 Priority: extra
-Maintainer: Open vSwitch developers <dev@openvswitch.org>
-Uploaders: Simon Horman <horms@debian.org>
+Maintainer: Thomas Dreibholz <dreibh@simula.no>
 Build-Depends: autoconf (>= 2.64),
                automake (>= 1.10) | automake1.10,
                bzip2,
@@ -15,6 +14,8 @@ Build-Depends: autoconf (>= 2.64),
                libunbound-dev,
                libunwind-dev,
                openssl,
+               p4lang-bmv2,
+               p4lang-pi,
                procps,
                python3-all,
                python3-sphinx,
