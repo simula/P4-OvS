@@ -34,9 +34,10 @@ Vcs-Git: https://github.com/simula/P4-OvS
 XS-Testsuite: autopkgtest
 
 Package: openvswitch-p4-common
+Replaces: openvswitch-common
+Breaks: openvswitch-common
 Provides: openvswitch-common
-Replaces: openvswitch-p4-switch (<< 2.13.0~git20200212.15ae9db33-0ubuntu2~)
-Architecture: amd64 arm64
+Architecture: amd64
 Depends: openssl,
          python3-six,
          ${misc:Depends},
@@ -44,7 +45,6 @@ Depends: openssl,
          ${shlibs:Depends}
 Suggests: ethtool,
           openvswitch-p4-doc
-Breaks: openvswitch-p4-switch (<< 2.13.0~git20200212.15ae9db33-0ubuntu2~)
 Description: Open vSwitch common components
  Open vSwitch is a production quality, multilayer, software-based,
  Ethernet virtual switch. It is designed to enable massive network
@@ -58,10 +58,11 @@ Description: Open vSwitch common components
  and openvswitch-p4-testcontroller.
 
 Package: openvswitch-p4-dbg
-Provides: openvswitch-dbg
 Replaces: openvswitch-dbg
+Breaks: openvswitch-dbg
+Provides: openvswitch-dbg
 Section: debug
-Architecture: amd64 arm64
+Architecture: amd64
 Depends: openvswitch-p4-common (= ${binary:Version}),
          openvswitch-p4-switch (= ${binary:Version}),
          ${misc:Depends},
@@ -80,8 +81,9 @@ Description: Debug symbols for Open vSwitch packages
  produced by one of them.
 
 Package: openvswitch-p4-doc
-Provides: openvswitch-doc
 Replaces: openvswitch-doc
+Breaks: openvswitch-doc
+Provides: openvswitch-doc
 Section: doc
 Architecture: all
 Depends: ${misc:Depends},
@@ -99,8 +101,9 @@ Description: Open vSwitch documentation
  of Open vSwitch.
 
 Package: openvswitch-p4-pki
-Provides: openvswitch-pki
 Replaces: openvswitch-pki
+Breaks: openvswitch-pki
+Provides: openvswitch-pki
 Architecture: all
 Depends: openvswitch-p4-common (<< ${source:Version}.1~),
          openvswitch-p4-common (>= ${source:Version}),
@@ -119,8 +122,9 @@ Description: Open vSwitch public key infrastructure dependency package
  man-in-the-middle attacks on the Open vSwitch network infrastructure.
 
 Package: openvswitch-p4-source
-Provides: openvswitch-source
 Replaces: openvswitch-source
+Breaks: openvswitch-source
+Provides: openvswitch-source
 Architecture: all
 Depends: ${misc:Depends}
 Description: Open vSwitch source code
@@ -136,9 +140,10 @@ Description: Open vSwitch source code
  use with the Open Virtual Network (OVN) build.
 
 Package: openvswitch-p4-switch
-Provides: openvswitch-switch
 Replaces: openvswitch-switch
-Architecture: amd64 arm64
+Breaks: openvswitch-switch
+Provides: openvswitch-switch
+Architecture: amd64
 Depends: kmod | module-init-tools,
          netbase,
          openvswitch-p4-common (= ${binary:Version}),
@@ -164,7 +169,7 @@ Description: Open vSwitch switch implementations
 Package: openvswitch-p4-switch-dpdk
 Provides: openvswitch-switch-dpdk
 Replaces: openvswitch-switch-dpdk
-Architecture: amd64 arm64
+Architecture: amd64
 Depends: dpdk,
          openvswitch-p4-switch (= ${binary:Version}),
          ${misc:Depends},
@@ -190,8 +195,9 @@ Description: DPDK enabled Open vSwitch switch implementation
  binary.
 
 Package: openvswitch-p4-test
-Provides: openvswitch-test
 Replaces: openvswitch-test
+Breaks: openvswitch-test
+Provides: openvswitch-test
 Architecture: all
 Depends: python3-twisted,
          ${misc:Depends},
@@ -209,14 +215,14 @@ Description: Open vSwitch test package
  performance and connectivity issues in Open vSwitch setup.
 
 Package: openvswitch-p4-testcontroller
+Replaces: openvswitch-testcontroller
+Breaks: openvswitch-p4-test (<< 2.1.2-0ubuntu3)
 Provides: openvswitch-testcontroller
-Replaces: openvswitch-p4-test (<< 2.1.2-0ubuntu3)
-Architecture: amd64 arm64
+Architecture: amd64
 Depends: openvswitch-p4-common (= ${binary:Version}),
          openvswitch-p4-pki (= ${source:Version}),
          ${misc:Depends},
          ${shlibs:Depends}
-Breaks: openvswitch-p4-test (<< 2.1.2-0ubuntu3)
 Description: Simple controller for testing OpenFlow setups
  This controller enables OpenFlow switches that connect to it to act
  as MAC-learning Ethernet switches.  It can be used for initial
@@ -224,9 +230,10 @@ Description: Simple controller for testing OpenFlow setups
  part of a production OpenFlow deployment.
 
 Package: openvswitch-p4-vtep
-Provides: openvswitch-vtep
 Replaces: openvswitch-vtep
-Architecture: amd64 arm64
+Breaks: openvswitch-vtep
+Provides: openvswitch-vtep
+Architecture: amd64
 Depends: lsb-release,
          openvswitch-p4-common (>= ${binary:Version}),
          openvswitch-p4-switch (>= ${binary:Version}),
@@ -247,8 +254,9 @@ Description: Open vSwitch VTEP utilities
  VTEP-configured database and a VTEP emulator.
 
 Package: python3-openvswitch-p4
-Provides: python3-openvswitch
 Replaces: python3-openvswitch
+Breaks: python3-openvswitch
+Provides: python3-openvswitch
 Architecture: all
 Section: python
 Depends: python3-six,

@@ -1,5 +1,5 @@
-openvswitch (2.13.1-0ubuntu0.20.04.4+git20210315160207~fab1b7da-1ppa1) unstable; urgency=medium
+openvswitch (2.15.1+git20210315174004~fab1b7da-1ppa1) unstable; urgency=medium
 
   * Self-made package
 
- -- Thomas Dreibholz <dreibh@iem.uni-due.de>  Mon, 15 Mar 2021 17:02:07 +0100
+ -- Thomas Dreibholz <dreibh@iem.uni-due.de>  Mon, 15 Mar 2021 18:40:04 +0100
