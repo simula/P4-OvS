@@ -1,3 +1,8 @@
+# usr/lib/*/libofproto*.so
+# usr/lib/*/libopenvswitch*.so
+# usr/lib/*/libovsdb*.so
+# usr/lib/*/libsflow*.so
+# usr/lib/*/libvtep*.so
 include/*.h usr/include/openvswitch
 include/openflow/*.h usr/include/openvswitch/openflow
 include/openvswitch/*.h usr/include/openvswitch/openvswitch
@@ -7,13 +12,8 @@ include/sparse/netinet/*.h usr/include/openvswitch/sparse/netinet
 include/sparse/sys/*.h usr/include/openvswitch/sparse/sys
 lib/*.h usr/include/openvswitch/lib
 usr/lib/*/libofproto*.a
-usr/lib/*/libofproto*.so
 usr/lib/*/libopenvswitch*.a
-usr/lib/*/libopenvswitch*.so
 usr/lib/*/libovsdb*.a
-usr/lib/*/libovsdb*.so
 usr/lib/*/libsflow*.a
-usr/lib/*/libsflow*.so
 usr/lib/*/libvtep*.a
-usr/lib/*/libvtep*.so
 usr/lib/*/pkgconfig

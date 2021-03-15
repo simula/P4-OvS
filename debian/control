@@ -1,11 +1,11 @@
 Source: openvswitch
 Section: net
-Priority: extra
+Priority: optional
 Maintainer: Thomas Dreibholz <dreibh@simula.no>
 Build-Depends: autoconf (>= 2.64),
-               automake (>= 1.10) | automake1.10,
+               automake (>= 1.10),
                bzip2,
-               debhelper (>= 8),
+               debhelper (>= 12),
                dh-autoreconf,
                dh-python,
                graphviz,
