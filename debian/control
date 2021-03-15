@@ -5,7 +5,7 @@ Maintainer: Thomas Dreibholz <dreibh@simula.no>
 Build-Depends: autoconf (>= 2.64),
                automake (>= 1.10),
                bzip2,
-               debhelper (>= 12),
+               debhelper (>= 10),
                dh-python,
                graphviz,
                libcap-ng-dev,
@@ -26,10 +26,11 @@ Build-Depends: autoconf (>= 2.64),
                python3-six,
                python3-sortedcontainers,
                python3-sphinx
-Standards-Version: 4.4.0
+Standards-Version: 4.5.1.0
+Rules-Requires-Root: no
 Homepage: http://openvswitch.org/
-Vcs-Browser: https://git.launchpad.net/~ubuntu-server-dev/ubuntu/+source/openvswitch
-Vcs-Git: git://git.launchpad.net/~ubuntu-server-dev/ubuntu/+source/openvswitch
+Vcs-Browser: https://github.com/simula/P4-OvS.git
+Vcs-Git: https://github.com/simula/P4-OvS
 XS-Testsuite: autopkgtest
 
 Package: openvswitch-common
