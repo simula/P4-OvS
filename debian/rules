@@ -32,14 +32,14 @@ override_dh_autoreconf:
 override_dh_auto_configure:
 	dh_auto_configure -- --enable-ssl --enable-dpdk --disable-shared $(DATAPATH_CONFIGURE_OPTS)
 
-override_dh_auto_test:
-ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
-	if $(MAKE) check TESTSUITEFLAGS='$(PARALLEL)' RECHECK=yes; then :; \
-	else \
-		cat tests/testsuite.log; \
-		exit 1; \
-	fi
-endif
+#override_dh_auto_test:
+#ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+#	if $(MAKE) check TESTSUITEFLAGS='$(PARALLEL)' RECHECK=yes; then :; \
+#	else \
+#		cat tests/testsuite.log; \
+#		exit 1; \
+#	fi
+#endif
 
 override_dh_auto_build:
 	dh_auto_build -- dist distdir=openvswitch
