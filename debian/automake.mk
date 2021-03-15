@@ -5,32 +5,32 @@ EXTRA_DIST += \
 	debian/copyright \
 	debian/copyright.in \
 	debian/dirs \
-	debian/openvswitch-common.dirs \
-	debian/openvswitch-common.install \
-	debian/openvswitch-pki.dirs \
-	debian/openvswitch-pki.postinst \
-	debian/openvswitch-pki.postrm \
-	debian/openvswitch-switch.README.Debian \
-	debian/openvswitch-switch.dirs \
-	debian/openvswitch-switch.init \
-	debian/openvswitch-switch.install \
-	debian/openvswitch-switch.logrotate \
-	debian/openvswitch-switch.postinst \
-	debian/openvswitch-switch.postrm \
-	debian/openvswitch-switch.default \
-	debian/openvswitch-switch.links \
-	debian/openvswitch-test.install \
-	debian/openvswitch-testcontroller.README.Debian \
-	debian/openvswitch-testcontroller.default \
-	debian/openvswitch-testcontroller.dirs \
-	debian/openvswitch-testcontroller.init \
-	debian/openvswitch-testcontroller.install \
-	debian/openvswitch-testcontroller.postinst \
-	debian/openvswitch-testcontroller.postrm \
-	debian/openvswitch-vtep.default \
-	debian/openvswitch-vtep.dirs \
-	debian/openvswitch-vtep.init \
-	debian/openvswitch-vtep.install \
+	debian/openvswitch-p4-common.dirs \
+	debian/openvswitch-p4-common.install \
+	debian/openvswitch-p4-pki.dirs \
+	debian/openvswitch-p4-pki.postinst \
+	debian/openvswitch-p4-pki.postrm \
+	debian/openvswitch-p4-switch.README.Debian \
+	debian/openvswitch-p4-switch.dirs \
+	debian/openvswitch-p4-switch.init \
+	debian/openvswitch-p4-switch.install \
+	debian/openvswitch-p4-switch.logrotate \
+	debian/openvswitch-p4-switch.postinst \
+	debian/openvswitch-p4-switch.postrm \
+	debian/openvswitch-p4-switch.default \
+	debian/openvswitch-p4-switch.links \
+	debian/openvswitch-p4-test.install \
+	debian/openvswitch-p4-testcontroller.README.Debian \
+	debian/openvswitch-p4-testcontroller.default \
+	debian/openvswitch-p4-testcontroller.dirs \
+	debian/openvswitch-p4-testcontroller.init \
+	debian/openvswitch-p4-testcontroller.install \
+	debian/openvswitch-p4-testcontroller.postinst \
+	debian/openvswitch-p4-testcontroller.postrm \
+	debian/openvswitch-p4-vtep.default \
+	debian/openvswitch-p4-vtep.dirs \
+	debian/openvswitch-p4-vtep.init \
+	debian/openvswitch-p4-vtep.install \
 	debian/rules \
 	debian/ifupdown.sh \
 	debian/source/format
