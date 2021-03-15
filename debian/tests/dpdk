@@ -34,6 +34,6 @@ echo "OK"
 echo "stop conflicting openvswitch testcontroller"
 systemctl stop openvswitch-testcontroller || true
 
-echo -n "running openflow tests using mininet"
+printf "running openflow tests using mininet"
 python2 `dirname $0`/openflow.py 2>&1
 echo "OK"
