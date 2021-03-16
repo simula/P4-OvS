@@ -47,25 +47,24 @@ TEST_LIST_DPDK = $(TEST_LIST)
 endif # armhf
 
 override_dh_auto_test:
-	true
-# ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
-# 	if $(MAKE) -C _debian check TESTSUITEFLAGS='$(PARALLEL) $(TEST_LIST)' || \
-#                 $(MAKE) -C _debian check TESTSUITEFLAGS='--recheck'; then :; \
-# 	else \
-# 		cat _debian/tests/testsuite.log; \
-# 		exit 1; \
-# 	fi
-# # Skip DPDK testing on arm64 as builders don't have crc32 support
-# # which is used in aarch64 based crc optimization in ovs >= 2.12.0~
-# ifneq (,$(filter i386 amd64 ppc64el, $(DEB_HOST_ARCH)))
-# 	if $(MAKE) -C _dpdk check TESTSUITEFLAGS='$(PARALLEL) $(TEST_LIST_DPDK)' || \
-# 				$(MAKE) -C _dpdk check TESTSUITEFLAGS='--recheck'; then :; \
-# 	else \
-# 		cat _dpdk/tests/testsuite.log; \
-# 		exit 1; \
-# 	fi
-# endif # i386/amd64/ppc64el
-# endif # nocheck
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+	if $(MAKE) -C _debian check TESTSUITEFLAGS='$(PARALLEL) $(TEST_LIST)' || \
+                $(MAKE) -C _debian check TESTSUITEFLAGS='--recheck'; then :; \
+	else \
+		cat _debian/tests/testsuite.log; \
+		exit 1; \
+	fi
+# Skip DPDK testing on arm64 as builders don't have crc32 support
+# which is used in aarch64 based crc optimization in ovs >= 2.12.0~
+ifneq (,$(filter i386 amd64 ppc64el, $(DEB_HOST_ARCH)))
+	if $(MAKE) -C _dpdk check TESTSUITEFLAGS='$(PARALLEL) $(TEST_LIST_DPDK)' || \
+				$(MAKE) -C _dpdk check TESTSUITEFLAGS='--recheck'; then :; \
+	else \
+		cat _dpdk/tests/testsuite.log; \
+		exit 1; \
+	fi
+endif # i386/amd64/ppc64el
+endif # nocheck
 
 override_dh_auto_build:
 	$(MAKE) $(PARALLEL) -C _debian dist distdir=openvswitch

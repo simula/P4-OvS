@@ -3,6 +3,7 @@ debian/ovs-systemd-reload /usr/share/openvswitch/scripts
 etc/bash_completion.d/ovs-vsctl-bashcomp.bash usr/share/bash-completion/completions
 usr/bin/ovs-dpctl
 usr/bin/ovs-dpctl-top
+usr/bin/ovs-p4ctl
 usr/bin/ovs-pcap
 usr/bin/ovs-tcpdump
 usr/bin/ovs-tcpundump
