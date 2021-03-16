@@ -5,6 +5,7 @@ Maintainer: Thomas Dreibholz <dreibh@simula.no>
 Build-Depends: autoconf (>= 2.64),
                automake (>= 1.10),
                bzip2,
+               clang,
                debhelper (>= 10),
                dh-python,
                graphviz,
