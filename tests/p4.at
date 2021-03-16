@@ -74,7 +74,7 @@ uint64_t entry(void *ctx, struct standard_metadata *std_meta){
 }
 ])
 
-AT_CHECK([clang -w -target bpf -c test.c -o test.o])
+AT_CHECK([clang -w -target bpf -nostdlibinc -c test.c -o test.o])
 
 AT_CHECK([ovs-vsctl add-br br-test -- set bridge br-test datapath_type=dummy-p4 p4=true other_config:program="test.o" other_config:p4info="test.json"],
         [0])
@@ -108,7 +108,7 @@ uint64_t entry(void *ctx, struct standard_metadata *std_meta){
 }
 ])
 
-AT_CHECK([clang -w -target bpf -c test.c -o test.o])
+AT_CHECK([clang -w -target bpf -nostdlibinc -c test.c -o test.o])
 
 AT_CHECK([ovs-vsctl add-br br-test -- set bridge br-test datapath_type=dummy-p4 p4=true other_config:program="test.o" other_config:p4info="test.json"], [0])
 
@@ -144,7 +144,7 @@ uint64_t entry(void *ctx, struct standard_metadata *std_meta){
 }
 ])
 
-AT_CHECK([clang -w -target bpf -c test.c -o test.o])
+AT_CHECK([clang -w -target bpf -nostdlibinc -c test.c -o test.o])
 
 AT_CHECK([ovs-vsctl add-br br-test -- set bridge br-test datapath_type=dummy-p4 p4=true other_config:program="test.o" other_config:p4info="test.json"], [0])
 
@@ -188,7 +188,7 @@ uint64_t entry(void *ctx, struct standard_metadata *std_meta){
 }
 ])
 
-AT_CHECK([clang -w -target bpf -c test.c -o test.o])
+AT_CHECK([clang -w -target bpf -nostdlibinc -c test.c -o test.o])
 
 AT_CHECK([ovs-vsctl add-br br-test -- set bridge br-test datapath_type=dummy-p4 p4=true other_config:program="test.o" other_config:p4info="test.json"], [0])
 
@@ -225,7 +225,7 @@ uint64_t entry(void *ctx, struct standard_metadata *std_meta){
 }
 ])
 
-AT_CHECK([clang -w -target bpf -c test.c -o test.o])
+AT_CHECK([clang -w -target bpf -nostdlibinc -c test.c -o test.o])
 
 AT_CHECK([ovs-vsctl add-br br1 -- set bridge br1 datapath_type=dummy-p4 p4=true other_config:program="test.o" other_config:p4info="test.json"], [0])
 AT_CHECK([ovs-vsctl add-br br2 -- set bridge br2 datapath_type=dummy-p4 p4=true other_config:program="test.o" other_config:p4info="test.json"], [0])
@@ -267,7 +267,7 @@ uint64_t entry(void *ctx, struct standard_metadata *std_meta){
 }
 ])
 
-AT_CHECK([clang -w -target bpf -c test.c -o test.o])
+AT_CHECK([clang -w -target bpf -nostdlibinc -c test.c -o test.o])
 
 AT_CHECK([ovs-vsctl add-br br1 -- set bridge br1 datapath_type=dummy-p4 p4=true other_config:program="test.o" other_config:p4info="test.json"], [0])
 AT_CHECK([ovs-vsctl add-br br2 -- set bridge br2 datapath_type=dummy-p4 p4=true other_config:program="test.o" other_config:p4info="test.json"], [0])
