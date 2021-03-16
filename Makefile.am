@@ -96,7 +96,17 @@ EXTRA_DIST = \
 	demo/test.sh \
 	demo/demo.p4 \
 	demo/demo-2.p4 \
-	.mailmap
+	.mailmap \
+	\
+	filter-empty-entries \
+	build-deb \
+	clean-deb \
+	make-deb \
+	make-ppa \
+	make-upstream-package \
+	packaging.conf \
+	renew-debian-changelog
+
 bin_PROGRAMS =
 sbin_PROGRAMS =
 bin_SCRIPTS =
