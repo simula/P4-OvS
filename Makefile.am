@@ -368,7 +368,7 @@ ALL_LOCAL += check-ifconfig
 check-ifconfig:
 	@if test -e $(srcdir)/.git && (git --version) >/dev/null 2>&1 && \
 	  (cd $(srcdir) && git --no-pager grep -l -E -e 'ifconfig' | \
-           $(EGREP) -v 'Makefile.am|ovs-vsctl-bashcomp|openvswitch-custom\.te'); \
+           $(EGREP) -v 'Makefile.am|ovs-vsctl-bashcomp|openvswitch-custom\.te|ifupdown.sh'); \
 	then \
 	  echo "See above for list of files that use or reference"; \
           echo "'ifconfig'.  Please use 'ip' instead."; \
