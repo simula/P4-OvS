@@ -77,6 +77,7 @@ AC_DEFUN([OVS_CHECK_LINUX], [
 
   if test X"$with_linux" != X; then
     KBUILD=$with_linux
+    AC_MSG_WARN([--with-linux is deprecated and kernel support is limited to 5.8 and below])
   elif test X"$with_l26" != X; then
     KBUILD=$with_l26
     AC_MSG_WARN([--with-l26 is deprecated, please use --with-linux instead])
@@ -167,10 +168,10 @@ AC_DEFUN([OVS_CHECK_LINUX], [
     AC_MSG_RESULT([$kversion])
 
     if test "$version" -ge 5; then
-       if test "$version" = 5 && test "$patchlevel" -le 5; then
+       if test "$version" = 5 && test "$patchlevel" -le 8; then
           : # Linux 5.x
        else
-          AC_ERROR([Linux kernel in $KBUILD is version $kversion, but version newer than 5.5.x is not supported (please refer to the FAQ for advice)])
+          AC_ERROR([Linux kernel in $KBUILD is version $kversion, but version newer than 5.8.x is not supported (please refer to the FAQ for advice)])
        fi
     elif test "$version" = 4; then
        : # Linux 4.x
@@ -208,10 +209,10 @@ dnl Configure Linux tc compat.
 AC_DEFUN([OVS_CHECK_LINUX_TC], [
   AC_COMPILE_IFELSE([
     AC_LANG_PROGRAM([#include <linux/pkt_cls.h>], [
-        int x = TCA_ACT_FLAGS;
+        int x = TCA_FLOWER_KEY_CT_FLAGS_REPLY;
     ])],
-    [AC_DEFINE([HAVE_TCA_ACT_FLAGS], [1],
-               [Define to 1 if TCA_ACT_FLAGS is available.])])
+    [AC_DEFINE([HAVE_TCA_FLOWER_KEY_CT_FLAGS_REPLY], [1],
+               [Define to 1 if TCA_FLOWER_KEY_CT_FLAGS_REPLY is available.])])
 
   AC_CHECK_MEMBERS([struct tcf_t.firstuse], [], [], [#include <linux/pkt_cls.h>])
 
@@ -334,8 +335,9 @@ dnl
 dnl Configure DPDK source tree
 AC_DEFUN([OVS_CHECK_DPDK], [
   AC_ARG_WITH([dpdk],
-              [AC_HELP_STRING([--with-dpdk=/path/to/dpdk],
-                              [Specify the DPDK build directory])],
+              [AC_HELP_STRING([--with-dpdk=static|shared|yes],
+                              [Specify "static" or "shared" depending on the
+                              DPDK libraries to use])],
               [have_dpdk=true])
 
   AC_MSG_CHECKING([whether dpdk is enabled])
@@ -345,35 +347,41 @@ AC_DEFUN([OVS_CHECK_DPDK], [
   else
     AC_MSG_RESULT([yes])
     case "$with_dpdk" in
-      yes)
-        DPDK_AUTO_DISCOVER="true"
-        PKG_CHECK_MODULES_STATIC([DPDK], [libdpdk], [
-            DPDK_INCLUDE="$DPDK_CFLAGS"
-            DPDK_LIB="$DPDK_LIBS"], [
-            DPDK_INCLUDE="-I/usr/local/include/dpdk -I/usr/include/dpdk"
-            DPDK_LIB="-ldpdk"])
-        ;;
-      *)
-        DPDK_AUTO_DISCOVER="false"
-        DPDK_INCLUDE_PATH="$with_dpdk/include"
-        # If 'with_dpdk' is passed install directory, point to headers
-        # installed in $DESTDIR/$prefix/include/dpdk
-        if test -e "$DPDK_INCLUDE_PATH/rte_config.h"; then
-           DPDK_INCLUDE="-I$DPDK_INCLUDE_PATH"
-        elif test -e "$DPDK_INCLUDE_PATH/dpdk/rte_config.h"; then
-           DPDK_INCLUDE="-I$DPDK_INCLUDE_PATH/dpdk"
-        fi
-        DPDK_LIB_DIR="$with_dpdk/lib"
-        DPDK_LIB="-ldpdk"
-        ;;
+      "shared")
+          PKG_CHECK_MODULES([DPDK], [libdpdk], [
+              DPDK_INCLUDE="$DPDK_CFLAGS"
+              DPDK_LIB="$DPDK_LIBS"])
+              ;;
+      "static" | "yes")
+          PKG_CHECK_MODULES_STATIC([DPDK], [libdpdk], [
+              DPDK_INCLUDE="$DPDK_CFLAGS"
+              DPDK_LIB="$DPDK_LIBS"])
+
+          dnl Statically linked private DPDK objects of form
+          dnl -l:file.a must be positioned between
+          dnl --whole-archive ... --no-whole-archive linker parameters.
+          dnl Old pkg-config versions misplace --no-whole-archive parameter
+          dnl and put it next to --whole-archive.
+          AC_MSG_CHECKING([for faulty pkg-config version])
+          echo "$DPDK_LIB" | grep -q 'whole-archive.*l:lib.*no-whole-archive'
+          status=$?
+          case $status in
+            0)
+              AC_MSG_RESULT([no])
+              ;;
+            1)
+              AC_MSG_RESULT([yes])
+              AC_MSG_ERROR([Please upgrade pkg-config])
+              ;;
+            *)
+              AC_MSG_ERROR([grep exited with status $status])
+              ;;
+          esac
     esac
 
     ovs_save_CFLAGS="$CFLAGS"
     ovs_save_LDFLAGS="$LDFLAGS"
     CFLAGS="$CFLAGS $DPDK_INCLUDE"
-    if test "$DPDK_AUTO_DISCOVER" = "false"; then
-      LDFLAGS="$LDFLAGS -L${DPDK_LIB_DIR}"
-    fi
 
     AC_CHECK_HEADERS([rte_config.h], [], [
       AC_MSG_ERROR([unable to find rte_config.h in $with_dpdk])
@@ -422,20 +430,24 @@ AC_DEFUN([OVS_CHECK_DPDK], [
       [AC_MSG_RESULT([yes])
        DPDKLIB_FOUND=true],
       [AC_MSG_RESULT([no])
-       if test "$DPDK_AUTO_DISCOVER" = "true"; then
-         AC_MSG_ERROR(m4_normalize([
-            Could not find DPDK library in default search path, Use --with-dpdk
-            to specify the DPDK library installed in non-standard location]))
-       else
-         AC_MSG_ERROR([Could not find DPDK libraries in $DPDK_LIB_DIR])
-       fi
+       AC_MSG_ERROR(m4_normalize([
+          Could not find DPDK library in default search path, update
+          PKG_CONFIG_PATH for pkg-config to find the .pc file in
+          non-standard location]))
       ])
 
     CFLAGS="$ovs_save_CFLAGS"
     LDFLAGS="$ovs_save_LDFLAGS"
-    if test "$DPDK_AUTO_DISCOVER" = "false"; then
-      OVS_LDFLAGS="$OVS_LDFLAGS -L$DPDK_LIB_DIR"
-    fi
+    # Stripping out possible instruction set specific configuration that DPDK
+    # forces in pkg-config since this could override user-specified options.
+    # It's enough to have -mssse3 to build with DPDK headers.
+    DPDK_INCLUDE=$(echo "$DPDK_INCLUDE" | sed 's/-march=[[^ ]]*//g')
+    # Also stripping out '-mno-avx512f'.  Support for AVX512 will be disabled
+    # if OVS will detect that it's broken.  OVS could be built with a
+    # completely different toolchain that correctly supports AVX512, flags
+    # forced by DPDK only breaks our feature detection mechanism and leads to
+    # build failures: https://github.com/openvswitch/ovs-issues/issues/201
+    DPDK_INCLUDE=$(echo "$DPDK_INCLUDE" | sed 's/-mno-avx512f//g')
     OVS_CFLAGS="$OVS_CFLAGS $DPDK_INCLUDE"
     OVS_ENABLE_OPTION([-mssse3])
 
@@ -444,17 +456,15 @@ AC_DEFUN([OVS_CHECK_DPDK], [
     # This happens because the rest of the DPDK code doesn't use any symbol in
     # the pmd driver objects, and the drivers register themselves using an
     # __attribute__((constructor)) function.
-    #
-    # These options are specified inside a single -Wl directive to prevent
-    # autotools from reordering them.
-    #
-    # OTOH newer versions of dpdk pkg-config (generated with Meson)
-    # will already have flagged just the right set of libs with
-    # --whole-archive - in those cases do not wrap it once more.
-    case "$DPDK_LIB" in
-      *whole-archive*) DPDK_vswitchd_LDFLAGS=$DPDK_LIB;;
-      *) DPDK_vswitchd_LDFLAGS=-Wl,--whole-archive,$DPDK_LIB,--no-whole-archive
-    esac
+    # Wrap the DPDK libraries inside a single -Wl directive
+    # after comma separation to prevent autotools from reordering them.
+    DPDK_vswitchd_LDFLAGS=$(echo "$DPDK_LIB"| tr -s ' ' ',' | sed 's/-Wl,//g')
+    # Replace -pthread with -lpthread for LD and remove the last extra comma.
+    DPDK_vswitchd_LDFLAGS=$(echo "$DPDK_vswitchd_LDFLAGS"| sed 's/,$//' | \
+                            sed 's/-pthread/-lpthread/g')
+    # Prepend "-Wl,".
+    DPDK_vswitchd_LDFLAGS="-Wl,$DPDK_vswitchd_LDFLAGS"
+
     AC_SUBST([DPDK_vswitchd_LDFLAGS])
     AC_DEFINE([DPDK_NETDEV], [1], [System uses the DPDK module.])
   fi
@@ -631,6 +641,9 @@ AC_DEFUN([OVS_CHECK_LINUX_COMPAT], [
                   [OVS_DEFINE([HAVE_UPSTREAM_STATIC_KEY])])
   OVS_GREP_IFELSE([$KSRC/include/linux/jump_label.h], [DEFINE_STATIC_KEY_FALSE],
                   [OVS_DEFINE([HAVE_DEFINE_STATIC_KEY])])
+  OVS_GREP_IFELSE([$KSRC/include/linux/jump_label.h],
+                  [DECLARE_STATIC_KEY_FALSE],
+                  [OVS_DEFINE([HAVE_DECLARE_STATIC_KEY])])
 
   OVS_GREP_IFELSE([$KSRC/include/linux/etherdevice.h], [eth_hw_addr_random])
   OVS_GREP_IFELSE([$KSRC/include/linux/etherdevice.h], [ether_addr_copy])
@@ -874,8 +887,6 @@ AC_DEFUN([OVS_CHECK_LINUX_COMPAT], [
   OVS_GREP_IFELSE([$KSRC/include/linux/skbuff.h], [skb_clear_hash])
   OVS_GREP_IFELSE([$KSRC/include/linux/skbuff.h], [int.skb_zerocopy(],
                   [OVS_DEFINE([HAVE_SKB_ZEROCOPY])])
-  OVS_GREP_IFELSE([$KSRC/include/linux/skbuff.h], [u8.*l4_rxhash],
-                  [OVS_DEFINE([HAVE_L4_RXHASH])])
   OVS_GREP_IFELSE([$KSRC/include/linux/skbuff.h], [skb_ensure_writable])
   OVS_GREP_IFELSE([$KSRC/include/linux/skbuff.h], [skb_vlan_pop])
   OVS_GREP_IFELSE([$KSRC/include/linux/skbuff.h], [__skb_vlan_pop])
@@ -972,8 +983,6 @@ AC_DEFUN([OVS_CHECK_LINUX_COMPAT], [
 
   OVS_GREP_IFELSE([$KSRC/include/net/sock.h], [sk_no_check_tx])
   OVS_GREP_IFELSE([$KSRC/include/linux/udp.h], [no_check6_tx])
-  OVS_GREP_IFELSE([$KSRC/include/linux/utsrelease.h], [el6],
-                  [OVS_DEFINE([HAVE_RHEL6_PER_CPU])])
   OVS_FIND_PARAM_IFELSE([$KSRC/include/net/protocol.h],
                         [udp_add_offload], [net],
                         [OVS_DEFINE([HAVE_UDP_ADD_OFFLOAD_TAKES_NET])])
