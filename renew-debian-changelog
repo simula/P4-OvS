@@ -24,8 +24,8 @@ UPSTREAM_VERSION=`echo $DEBIAN_VERSION  | sed -e "s/-[0-9]*$//"`
 # The package's plain upstream version, e.g. 1.2.3 (without e.g. ~svn<xxxx>)
 PLAIN_VERSION=`echo $UPSTREAM_VERSION   | sed -e "s/\([0-9\.]*\)[-+~].*$/\1/"`
 
-GIT_VERSION="git`env LANG=en date -u +"%Y%m%d%H%M%S"`"
-GIT_ID="${GIT_VERSION}~`cat .git/ORIG_HEAD | cut -b 1-8`"   # Name may not be too long! Just take 8 digits ...
+GIT_VERSION="g`env LANG=en date -u +"%Y%m%d%H%M"`"
+GIT_ID="${GIT_VERSION}~`cat .git/ORIG_HEAD | cut -b 1-6`"   # Name may not be too long! Just take 6 digits ...
 
 # ------ Change configure.ac ------------------------------------------------
 sed "s#AC_INIT([a-zA-Z0-9-]*,.*,#AC_INIT(openvswitch, ${PACKAGE_VERSION}+$GIT_ID,#g" <configure.ac >configure.ac.new
